@@ -15,8 +15,9 @@ import Color from "./App/Utils/Color";
 import { useFonts } from 'expo-font';
 import HomeScreen from "./App/Screens/HomeScreen/HomeScreen";
 
-const Stack = createNativeStackNavigator();
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const Stack = createNativeStackNavigator();
 
 const tokenCache = {
   async getToken(key) {
@@ -62,25 +63,57 @@ export default function App() {
     'outfit-bold': require('./assets/fonts/Outfit-Bold.ttf'),
     'outfit-medium': require('./assets/fonts/Outfit-Medium.ttf'),
   });
+
+  const getToken =  async () => {
+        try {
+          const savedUser = await AsyncStorage.getItem("userToken");
+          return savedUser
+        } catch (error) {
+          console.log(error);
+          return null
+        }
+    };
+    
   
   return (
     <ClerkProvider
       publishableKey="pk_test_dW5iaWFzZWQtd2FscnVzLTgzLmNsZXJrLmFjY291bnRzLmRldiQ"
       tokenCache={tokenCache}
     >
-
       <View style={styles.container}>
-        <SignedIn>
+      {getToken() ? 
+      <SignedOut>
+        <LoginScreen />
+      </SignedOut> 
+      :
+      
+      <View>
           <NavigationContainer>
             <TabNavigation />
           </NavigationContainer>
           <SignOut />
-        </SignedIn>
-        <SignedOut>
-          <LoginScreen />
-        </SignedOut>
+      </View>
+      }
       </View>
     </ClerkProvider>
+    // <ClerkProvider
+    //   publishableKey="pk_test_dW5iaWFzZWQtd2FscnVzLTgzLmNsZXJrLmFjY291bnRzLmRldiQ"
+    //   tokenCache={tokenCache}
+    // >
+    //   <NavigationContainer>
+    //     <View style={styles.container}>
+    //       <SignedIn>
+    //         <Stack.Navigator>
+    //           <Stack.Screen name="Home" component={HomeScreen} />
+    //         </Stack.Navigator>
+    //         <TabNavigation />
+    //       </SignedIn>
+    //       <SignedOut>
+    //         <LoginScreen />
+    //       </SignedOut>
+    //     </View>
+    //   </NavigationContainer>
+    // </ClerkProvider>
   );
 }
 

@@ -9,7 +9,6 @@ import { useNavigation } from '@react-navigation/native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
@@ -17,7 +16,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
 
-   const navigation = useNavigation();
+  // const navigation = useNavigation();
 
   useWarmUpBrowser();
 
@@ -33,16 +32,20 @@ export default function LoginScreen() {
       if (response.status === 200) {
         Alert.alert(
           'Login Berhasil',
-          'Selamat datang kembali, ' + response.data.username + '!',
+          'Selamat datang kembali, ' + response.data.data.username + '!',
           [{ text: 'OK', onPress: () => console.log('OK Ditekan') }],
           { cancelable: false }
         );
   
         // Simpan token atau sesi pengguna menggunakan AsyncStorage
-        await AsyncStorage.setItem('userToken', response.data.token);
+        await AsyncStorage.setItem('userToken', response.data.data.token);
+
+        // Mendapatkan token dari AsyncStorage dan mencetaknya
+        const storedToken = await AsyncStorage.getItem('userToken');
+        console.log('Token yang disimpan:', storedToken);
   
         // Redirect ke halaman home screen (ganti dengan navigasi yang sesuai)
-        navigation.navigate('Home');
+        // navigation.navigate('Home');
       } else {
         const errorMessage = response.data.message || 'Login Gagal. Silakan coba lagi.';
         Alert.alert(
@@ -103,7 +106,7 @@ export default function LoginScreen() {
         Don't have an account? Sign Up
       </Text>
       <TouchableOpacity style={styles.button} onPress={onPress}>
-        <Text style={{ textAlign: 'center', fontSize: 17, color: Color.PRIMARY }}>Login With Google</Text>
+        <Text style={{ textAlign: 'center', fontSize: 14, color: Color.WHITE }}>Login With Google</Text>
       </TouchableOpacity>
     </View>
   );
@@ -153,9 +156,9 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   button: {
-    padding: 15,
-    backgroundColor: Color.WHITE,
-    borderRadius: 99,
+    padding: 10,
+    backgroundColor: '#fc0b03',
+    borderRadius: 10,
     marginTop: 40,
   },
 });
