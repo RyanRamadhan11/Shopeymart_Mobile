@@ -6,7 +6,57 @@ import Header from './Header';
 import Slider from './Slider';
 import ListExample from './ListExample';
 
-const HomeScreen = () => {
+import { useAuth } from "@clerk/clerk-expo";
+import Color from "../../Utils/Color";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const HomeScreen = ({navigation}) => {
+
+  const SignOut = () => {
+    const { isLoaded, signOut } = useAuth();
+    if (!isLoaded) {
+      return null;
+    }
+    return (
+      <View>
+        <TouchableOpacity
+        style={{ backgroundColor: Color.PRIMARY, padding: 10, width: "100%" }}
+          title="Sign Out"
+          onPress={async () => {
+            signOut();
+            await AsyncStorage.removeItem("userToken");
+            await AsyncStorage.removeItem("username");
+            await AsyncStorage.removeItem("role");
+            navigation.navigate("login");
+          }}
+        >
+          <Text style={{ color: '#fff', textAlign: 'center', fontWeight: "bold"}}>Sign Out</Text>
+         </TouchableOpacity>
+      </View>
+    );
+  };
+
+  // const SignOut = () => {
+  //   const { isLoaded, signOut } = useAuth();
+  //   if (!isLoaded) {
+  //     return null;
+  //   }
+  //   return (
+  //     <View style={{marginTop: 20}}>
+  //       <TouchableOpacity
+  //         style={{ backgroundColor: Color.PRIMARY, padding: 10, width: "100%" }}
+  //         title="Sign Out"
+  //         onPress={() => {
+  //           signOut();
+  //           AsyncStorage.removeItem("userToken")
+  //           console.log(AsyncStorage.getItem("userToken"))
+  //         }}
+  //       >
+  //         <Text style={{ color: '#fff', textAlign: 'center', fontWeight: "bold"}}>Sign Out</Text>
+  //       </TouchableOpacity>
+  //     </View>
+  //   );
+  // };
 
   const featuredProducts = [
     { id: 1, name: 'Product 1', image: require('../../../assets/img/baner.png') },
@@ -46,11 +96,13 @@ const HomeScreen = () => {
       ListHeaderComponent={() => (
         <>
           <Header />
+
           <Slider />
           <View style={styles.header}>
             <FontAwesome style={styles.logo} name="shopping-bag" size={24} color="black" />
             <Text style={styles.title}>Shoyert Mart</Text>
           </View>
+
         </>
       )}
       data={[{ key: 'dummy' }]} // Dummy data, karena FlatList memerlukan data
@@ -80,6 +132,7 @@ const HomeScreen = () => {
             />
           </View>
 
+
           <View style={{ paddingBottom: 50 }}>
             <ListExample />
           </View>
@@ -92,6 +145,8 @@ const HomeScreen = () => {
             />
             <Text style={styles.bannerText}>Special Promo - Up to 50% Off!</Text>
           </TouchableOpacity>
+
+          <SignOut/>
         </>
       )}
     />

@@ -15,9 +15,8 @@ import Color from "./App/Utils/Color";
 import { useFonts } from 'expo-font';
 import HomeScreen from "./App/Screens/HomeScreen/HomeScreen";
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 const Stack = createNativeStackNavigator();
+
 
 const tokenCache = {
   async getToken(key) {
@@ -58,64 +57,57 @@ const SignOut = () => {
 
 export default function App() {
 
+  const [signedIn, setSignedIn] = React.useState(false);
+
   const [fontsLoaded, fontError] = useFonts({
     'outfit': require('./assets/fonts/Outfit-Regular.ttf'),
     'outfit-bold': require('./assets/fonts/Outfit-Bold.ttf'),
     'outfit-medium': require('./assets/fonts/Outfit-Medium.ttf'),
   });
 
-  const getToken =  async () => {
-        try {
-          const savedUser = await AsyncStorage.getItem("userToken");
-          return savedUser
-        } catch (error) {
-          console.log(error);
-          return null
-        }
-    };
-    
+  const getIsSignedIn = async () => {
+    let isSignedIn = await AsyncStorage.getItem("userToken");
+    setSignedIn(isSignedIn ? true : false);
+  };
+
+  React.useEffect(() => {
+    getIsSignedIn().then();
+  }, []);
+  
+  
   
   return (
-    <ClerkProvider
+<ClerkProvider
       publishableKey="pk_test_dW5iaWFzZWQtd2FscnVzLTgzLmNsZXJrLmFjY291bnRzLmRldiQ"
       tokenCache={tokenCache}
     >
       <View style={styles.container}>
-      {getToken() ? 
-      <SignedOut>
-        <LoginScreen />
-      </SignedOut> 
-      :
-      
-      <View>
+        <SignedIn>
           <NavigationContainer>
             <TabNavigation />
           </NavigationContainer>
-          <SignOut />
-      </View>
-      }
+          {/* <SignOut /> */}
+        </SignedIn>
+        {signedIn ? (
+          <NavigationContainer>
+            <TabNavigation />
+          </NavigationContainer>
+        ) : (
+          <SignedOut>
+            <NavigationContainer>
+              <Stack.Navigator screenOptions={{ headerShown: false }}>
+                {/* <LoginScreen /> */}
+                <Stack.Screen name="login" component={LoginScreen} />
+                <Stack.Screen name="Home" component={TabNavigation} />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </SignedOut>
+        )}
       </View>
     </ClerkProvider>
-    // <ClerkProvider
-    //   publishableKey="pk_test_dW5iaWFzZWQtd2FscnVzLTgzLmNsZXJrLmFjY291bnRzLmRldiQ"
-    //   tokenCache={tokenCache}
-    // >
-    //   <NavigationContainer>
-    //     <View style={styles.container}>
-    //       <SignedIn>
-    //         <Stack.Navigator>
-    //           <Stack.Screen name="Home" component={HomeScreen} />
-    //         </Stack.Navigator>
-    //         <TabNavigation />
-    //       </SignedIn>
-    //       <SignedOut>
-    //         <LoginScreen />
-    //       </SignedOut>
-    //     </View>
-    //   </NavigationContainer>
-    // </ClerkProvider>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

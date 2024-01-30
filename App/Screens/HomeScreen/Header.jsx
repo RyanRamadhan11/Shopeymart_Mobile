@@ -1,48 +1,82 @@
-import { View, Text, Image, StyleSheet, TextInput } from 'react-native'
-import React from 'react'
-import { useUser } from '@clerk/clerk-expo'
+import { View, Text, Image, StyleSheet, TextInput } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { useUser } from '@clerk/clerk-expo';
+import { FontAwesome6, FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome } from "@expo/vector-icons";
 import Color from '../../Utils/Color'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { FontAwesome6 } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function Header() {
 
-    const { user, isLoading } = useUser()
+    const [username, setUsername] = useState("");
+    const [role, setRole] = useState("");
+  
+    const { user, isLoading } = useUser();
 
-  return user && (
-    <View style={styles.container}>
-        <View style={styles.profileMainContainer}>
-            <View style={styles.profileContainer}>
-                <Image source={{ uri: user?.imageUrl }} style={styles.userImage} />
-                <View style={{ flex: 1}}>
-                    <Text style={{ color: 'white', fontFamily: 'outfit', fontSize: 16 }}>Welcome, To My App</Text>
-                    <Text style={{ color: 'white', fontFamily: 'outfit-medium', fontSize: 16 }}>{user?.fullName}</Text>
+  useEffect(() => {
+    AsyncStorage.getItem("username")
+      .then((uname) => {
+        setUsername(uname);
+        console.log("test", username, role);
+      })
+      .catch((err) => console.log(err));
+    // setUsername();
+    // setRole(AsyncStorage.getItem("role"));
+  }, []);
+
+  return (
+    <>
+      {user && (
+        <View style={styles.container}>
+            <View style={styles.profileMainContainer}>
+                <View style={styles.profileContainer}>
+                    <Image source={{ uri: user?.imageUrl }} style={styles.userImage} />
+                    <View style={{ flex: 1}}>
+                        <Text style={{ color: 'white', fontFamily: 'outfit', fontSize: 16 }}>Welcome, To My App</Text>
+                        <Text style={{ color: 'white', fontFamily: 'outfit-medium', fontSize: 16 }}>{user?.fullName}</Text>
+                    </View>
+                    <FontAwesome6 name="bookmark" size={24} color={Color.WHITE} />
                 </View>
-                <FontAwesome6 name="bookmark" size={24} color={Color.WHITE} />
             </View>
-        </View>
 
-        <View style={styles.searchBarContainer}>
-            <TextInput
-                placeholder='Search'
-                placeholderTextColor={Color.BLACK} // Ganti dengan warna placeholder yang diinginkan
-                style={styles.textInput}
-            />
-            <FontAwesome5 name="search" size={20} color={Color.PRIMARY} style={styles.searchBtn} />
-        </View>
+            <View style={styles.searchBarContainer}>
+                <TextInput
+                    placeholder='Search'
+                    placeholderTextColor={Color.BLACK} // Ganti dengan warna placeholder yang diinginkan
+                    style={styles.textInput}
+                />
+                <FontAwesome5 name="search" size={20} color={Color.PRIMARY} style={styles.searchBtn} />
+            </View>
 
-        {/* //style input berbeda */}
-        {/* <View style={styles.searchContainer}>
-            <FontAwesome5 name="search" size={20} color={Color.PRIMARY} style={styles.searchIcon} />
-            <TextInput
-                placeholder='Search'
-                placeholderTextColor={Color.BLACK} // Ganti dengan warna placeholder yang diinginkan
-                style={styles.input}
-            />
-        </View> */}
-    </View>
-  )
+        </View>
+      )}
+      {username && (
+        <View style={styles.container}>
+            <View style={styles.profileMainContainer}>
+                <View style={styles.profileContainer}>
+                    <Image source={{ uri: user?.imageUrl }} style={styles.userImage} />
+                    <View style={{ flex: 1}}>
+                        <Text style={{ color: 'white', fontFamily: 'outfit', fontSize: 16 }}>Welcome, To My App</Text>
+                        <Text style={{ color: 'white', fontFamily: 'outfit-medium', fontSize: 16 }}>{username}</Text>
+                    </View>
+                    <FontAwesome6 name="bookmark" size={24} color={Color.WHITE} />
+                </View>
+            </View>
+
+            <View style={styles.searchBarContainer}>
+                <TextInput
+                    placeholder='Search'
+                    placeholderTextColor={Color.BLACK} // Ganti dengan warna placeholder yang diinginkan
+                    style={styles.textInput}
+                />
+                <FontAwesome5 name="search" size={20} color={Color.PRIMARY} style={styles.searchBtn} />
+            </View>
+
+        </View>
+    )}
+    </>
+  );
 }
 
 const styles = StyleSheet.create({

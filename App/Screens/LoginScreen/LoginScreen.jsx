@@ -5,18 +5,18 @@ import * as WebBrowser from "expo-web-browser";
 import { useOAuth } from "@clerk/clerk-expo";
 import { useWarmUpBrowser } from "../../hooks/warmUpBrowser";
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 WebBrowser.maybeCompleteAuthSession();
 
-export default function LoginScreen() {
+export default function LoginScreen({navigation}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
 
-  // const navigation = useNavigation();
+  // const navigation = useNavigation();  // Uncomment this line
 
   useWarmUpBrowser();
 
@@ -39,13 +39,17 @@ export default function LoginScreen() {
   
         // Simpan token atau sesi pengguna menggunakan AsyncStorage
         await AsyncStorage.setItem('userToken', response.data.data.token);
+        await AsyncStorage.setItem('username', response.data.data.username);
+        await AsyncStorage.setItem('role', response.data.data.role);
 
         // Mendapatkan token dari AsyncStorage dan mencetaknya
         const storedToken = await AsyncStorage.getItem('userToken');
+        const storedData = await AsyncStorage.getItem('username');
         console.log('Token yang disimpan:', storedToken);
+        console.log('Data yang disimpan:', storedData);
   
-        // Redirect ke halaman home screen (ganti dengan navigasi yang sesuai)
-        // navigation.navigate('Home');
+         // Redirect ke halaman home screen
+         navigation.navigate('Home');
       } else {
         const errorMessage = response.data.message || 'Login Gagal. Silakan coba lagi.';
         Alert.alert(
