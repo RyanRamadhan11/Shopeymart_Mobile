@@ -6,8 +6,6 @@ import Header from './Header';
 import Slider from './Slider';
 import ListExample from './ListExample';
 
-
-
 const HomeScreen = () => {
 
   const featuredProducts = [

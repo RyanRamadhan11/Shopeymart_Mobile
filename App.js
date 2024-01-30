@@ -13,6 +13,7 @@ import Color from "./App/Utils/Color";
 
 
 import { useFonts } from 'expo-font';
+import HomeScreen from "./App/Screens/HomeScreen/HomeScreen";
 
 const Stack = createNativeStackNavigator();
 
