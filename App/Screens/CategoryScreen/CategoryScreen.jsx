@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   },
   flatListItem: {
     flexDirection: 'row',
-    backgroundColor: Color.PRIMARY,
+    backgroundColor: '#e05c14',
     padding: 20,
     marginVertical: 8,
     borderRadius: 8,
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   sectionItem: {
     flexDirection: 'row',
-    backgroundColor: Color.PRIMARY,
+    backgroundColor: Color.BLACK,
     padding: 20,
     marginVertical: 8,
     borderRadius: 8,

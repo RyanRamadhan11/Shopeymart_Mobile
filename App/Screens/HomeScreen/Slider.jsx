@@ -20,24 +20,11 @@ export default function Slide() {
         });
     };
 
-//   useEffect(() => {
-//     const fetchSliderData = async () => {
-//       try {
-//         const data = await GlobalApi.getSlider();
-//         setSlider(data.sliders);
-//       } catch (error) {
-//         console.error('Error fetching slider data:', error);
-//       }
-//     };
-
-//     fetchSliderData(); // Panggil fungsi saat komponen di-mount
-//   }, []);
-
 
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Offers For You</Text>
+      <Text style={styles.title}>Discount For You</Text>
       <FlatList
         data={slider}
         keyExtractor={(item) => item.id.toString()}

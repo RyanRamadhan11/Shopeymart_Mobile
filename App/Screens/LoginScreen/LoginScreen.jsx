@@ -8,7 +8,7 @@ import axios from 'axios';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
+import { Entypo } from '@expo/vector-icons';
 WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen({navigation}) {
@@ -70,6 +70,10 @@ export default function LoginScreen({navigation}) {
     }
   };
   
+  const handleRegister = () => {
+    navigation.navigate("register");
+  };
+
 
   const onPress = async () => {
     try {
@@ -77,7 +81,6 @@ export default function LoginScreen({navigation}) {
       if (createdSessionId) {
         setActive({ session: createdSessionId });
       } else {
-        // Use signIn or signUp for next steps such as MFA
       }
     } catch (err) {
       console.error("OAuth error", err);
@@ -86,33 +89,46 @@ export default function LoginScreen({navigation}) {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../../../assets/online.png')}
-        style={styles.logo}
-      />
-      <Text style={styles.label}>Username</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        onChangeText={(text) => setUsername(text)}
-      />
-      <Text style={styles.label}>Password</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        onChangeText={(text) => setPassword(text)}
-      />
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.loginButtonText}>Login</Text>
-      </TouchableOpacity>
+    <Image
+      source={require('../../../assets/online.png')}
+      style={styles.logo}
+    />
+    <Text style={{textAlign: 'center', paddingBottom: 30, color: '#fff', fontSize: 18, fontFamily: 'outfit-medium'}}>Login Shopeymart</Text>
+    <Text style={styles.label}>Username</Text>
+    <TextInput
+      style={styles.input}
+      placeholder="Enter your username"
+      onChangeText={(text) => setUsername(text)}
+    />
+    <Text style={styles.label}>Password</Text>
+    <TextInput
+      style={styles.input}
+      placeholder="Enter your password"
+      secureTextEntry
+      onChangeText={(text) => setPassword(text)}
+    />
+    <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+      <Text style={styles.loginButtonText}>Login</Text>
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.forgotPassword}>
+      <Text style={{ color: '#fff', fontSize: 14 }}>Forgot Password?</Text>
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.button} onPress={onPress}>
+      <View style={styles.buttonContent}>
+        <Image
+          source={require('../../../assets/img/gogle.png')}
+          style={styles.googleLogo}
+        />
+        <Text style={styles.loginWithGoogleText}>Login With Google</Text>
+      </View>
+    </TouchableOpacity>
+
+    <TouchableOpacity  onPress={handleRegister}>
       <Text style={styles.signUpText}>
         Don't have an account? Sign Up
       </Text>
-      <TouchableOpacity style={styles.button} onPress={onPress}>
-        <Text style={{ textAlign: 'center', fontSize: 14, color: Color.WHITE }}>Login With Google</Text>
-      </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
+  </View>
   );
 }
 
@@ -121,51 +137,86 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fc9003',
+    backgroundColor: Color.PRIMARY, // Use your primary color
+    padding: 20,
   },
   logo: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
+    width: 170,
+    height: 170,
+    borderRadius: 60,
     marginBottom: 20,
   },
   input: {
     height: 40,
-    width: '80%',
-    borderColor: '#e74c3c',
+    width: '100%',
+    backgroundColor: Color.WHITE,
+    color: Color.BLACK,
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 10,
     paddingLeft: 10,
   },
   label: {
-    color: 'white',
+    color: Color.WHITE,
     fontSize: 16,
     marginBottom: 5,
+    alignSelf: 'flex-start',
   },
   loginButton: {
-    marginTop: 20,
-    backgroundColor: '#000',
+    backgroundColor: Color.WHITE, // Use your tertiary color
     paddingVertical: 10,
-    paddingHorizontal: 20,
     borderRadius: 5,
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: 20,
   },
   loginButtonText: {
-    color: '#fff',
+    color: Color.PRIMARY,
+    fontWeight: 'bol',
     fontSize: 16,
     textAlign: 'center',
+    fontFamily: 'outfit-bold'
+  },
+  forgotPassword: {
+    marginTop: 10,
+    alignSelf: 'flex-end',
   },
   signUpText: {
-    marginTop: 30,
-    color: '#fff',
+    marginTop: 20,
+    color: Color.WHITE,
   },
   button: {
-    padding: 10,
-    backgroundColor: '#fc0b03',
-    borderRadius: 10,
-    marginTop: 40,
+    marginTop: 20,
+    padding: 15,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    width: '100%',
+    flexDirection: 'row', // Make it a row layout
+    alignItems: 'center', // Center items vertically
+    justifyContent: 'center', // Center items horizontally
   },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  googleLogo: {
+    width: 24,
+    height: 24,
+    marginRight: 10, // Add margin for spacing
+  },
+  loginWithGoogleText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: Color.PRIMARY,
+    fontFamily: 'outfit-medium'
+  },
+
 });
+
+
+
+
 
 
 

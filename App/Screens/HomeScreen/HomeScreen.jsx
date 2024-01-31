@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, FlatList } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome6 } from '@expo/vector-icons';
 import Header from './Header';
 import Slider from './Slider';
 import ListExample from './ListExample';
@@ -9,6 +10,8 @@ import ListExample from './ListExample';
 import { useAuth } from "@clerk/clerk-expo";
 import Color from "../../Utils/Color";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Store from '../Store/Store';
+import ProductScreen from '../ProductScreen/ProductScreen';
 
 const HomeScreen = ({navigation}) => {
 
@@ -36,27 +39,6 @@ const HomeScreen = ({navigation}) => {
     );
   };
 
-  // const SignOut = () => {
-  //   const { isLoaded, signOut } = useAuth();
-  //   if (!isLoaded) {
-  //     return null;
-  //   }
-  //   return (
-  //     <View style={{marginTop: 20}}>
-  //       <TouchableOpacity
-  //         style={{ backgroundColor: Color.PRIMARY, padding: 10, width: "100%" }}
-  //         title="Sign Out"
-  //         onPress={() => {
-  //           signOut();
-  //           AsyncStorage.removeItem("userToken")
-  //           console.log(AsyncStorage.getItem("userToken"))
-  //         }}
-  //       >
-  //         <Text style={{ color: '#fff', textAlign: 'center', fontWeight: "bold"}}>Sign Out</Text>
-  //       </TouchableOpacity>
-  //     </View>
-  //   );
-  // };
 
   const featuredProducts = [
     { id: 1, name: 'Product 1', image: require('../../../assets/img/baner.png') },
@@ -97,11 +79,17 @@ const HomeScreen = ({navigation}) => {
         <>
           <Header />
 
-          <Slider />
           <View style={styles.header}>
-            <FontAwesome style={styles.logo} name="shopping-bag" size={24} color="black" />
-            <Text style={styles.title}>Shoyert Mart</Text>
+            <FontAwesome6 name="cart-plus" size={24} color={Color.PRIMARY} />
+            <Text style={styles.title}>ShopeyMart</Text>
           </View>
+
+          <View style={styles.parag}>
+            <Text>Selamat datang di Shopeymart - Jual Beli Online
+                  Shopee Indonesia - Jual Beli Online Shopeymart adalah mobile-platform pertama di Asia Tenggara </Text>
+          </View>
+
+          <Slider />
 
         </>
       )}
@@ -121,7 +109,7 @@ const HomeScreen = ({navigation}) => {
             />
           </View>
 
-          <View style={styles.categoriesSection}>
+          {/* <View style={styles.categoriesSection}>
             <Text style={styles.sectionTitle}>Categories Discount</Text>
             <FlatList
               data={categories}
@@ -130,7 +118,11 @@ const HomeScreen = ({navigation}) => {
               horizontal
               showsHorizontalScrollIndicator={false}
             />
-          </View>
+          </View> */}
+
+          <ProductScreen/>
+
+          <Store />
 
 
           <View style={{ paddingBottom: 50 }}>
@@ -161,7 +153,17 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row', 
     alignItems: 'center',
-    paddingTop: 40,
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 18,
+    borderBottomWidth: 1,
+    borderBottomColor: '#7932a8',
+    color: '#000'
+  },
+  parag: {
+    alignItems: 'justify',
+    paddingTop: 20,
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 18,

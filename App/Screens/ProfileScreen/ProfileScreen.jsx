@@ -1,7 +1,31 @@
-import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { useUser } from '@clerk/clerk-expo';
+
+import Color from '../../Utils/Color'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProfileScreen = () => {
+
+
+  const [username, setUsername] = useState("");
+  const [role, setRole] = useState("");
+
+  const { user, isLoading } = useUser();
+
+  useEffect(() => {
+    AsyncStorage.getItem("username")
+      .then((uname) => {
+        setUsername(uname);
+      })
+      .catch((err) => console.log(err));
+    AsyncStorage.getItem("role")
+      .then((role) => {
+        setRole(role);  // Ganti setUsername menjadi setRole
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  
 
     const transactionHistory = [
         { id: '1', date: '2022-01-01', amount: "Rp. 120.000" },
@@ -29,14 +53,23 @@ const ProfileScreen = () => {
       );
   return (
     <ScrollView style={styles.container}>
+      {user && (
       <View style={styles.header}>
+        <Image source={{ uri: user?.imageUrl }} style={styles.userImage} />
+        <Text style={styles.userName}>{username}</Text>
+        <Text style={styles.userEmail}>{role}</Text>
+      </View>
+       )}
+       {username && (
+        <View style={styles.header}>
         <Image
           source={require('../../../assets/img/person2.jpeg')}
           style={styles.profileImage}
         />
-        <Text style={styles.userName}>Ryan Ramadhan</Text>
-        <Text style={styles.userEmail}>ryan.joo@gmail.com</Text>
+        <Text style={styles.userName}>{username}</Text>
+        <Text style={styles.userEmail}>{role}</Text>
       </View>
+      )}
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Transaction History</Text>
