@@ -9,8 +9,11 @@ import { useUser } from '@clerk/clerk-expo';
 
 import Color from '../../Utils/Color'
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation
 
-export default function Store() {
+const Store = () => {
+  const navigation = useNavigation(); 
+
   const [slider1, setSlider1] = useState([]);
   const [slider2, setSlider2] = useState([]);
   const [store, setStore] = useState([]);
@@ -101,6 +104,7 @@ export default function Store() {
   };
 
 
+
   const [role, setRole] = useState("");
 
   const { user, isLoading } = useUser();
@@ -113,6 +117,12 @@ export default function Store() {
       .catch((err) => console.log(err));
   }, []);
 
+
+  const handleAdd = () => {
+    navigation.navigate("addStore"); // Use navigation to navigate to 'addStore' screen
+  };
+
+
   return (
     <>
       <View>
@@ -124,10 +134,10 @@ export default function Store() {
           renderItem={({ item, index }) => (
             <Card containerStyle={styles.cardContainer}>
               <View style={styles.cardContent}>
-                <Image
+                {/* <Image
                   source={{ uri: item?.image?.url }}
                   style={styles.sliderImage}
-                />
+                /> */}
                 <View style={styles.textContent}>
                   <Text style={styles.title}>No - {item.noSiup}</Text>
                   <Text style={styles.title}>{item.name}</Text>
@@ -135,13 +145,23 @@ export default function Store() {
                   <Text style={styles.title}>No Hp: {item.mobilePhone}</Text>
                   
                   {role === 'ROLE_ADMIN' && (
-                  <TouchableOpacity
-                    style={styles.deleteButton}
-                    onPress={() => deleteStore(item.id)} // Pass the store ID to the handler
-                  >
-                    <Text style={styles.deleteButtonText}>Delete</Text>
-                  </TouchableOpacity>
-                   )}
+                  <>
+                      <TouchableOpacity
+                        style={styles.createButton}
+                        onPress={handleAdd} // Use the handleAdd function
+                      >
+                        <Text style={styles.createButtonText}>Add</Text>
+                      </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={styles.deleteButton}
+                      onPress={() => deleteStore(item.id)}
+                    >
+                      <Text style={styles.deleteButtonText}>Delete</Text>
+                    </TouchableOpacity>
+                  </>
+                  )}
+
                 </View>
               </View>
             </Card>
@@ -189,4 +209,16 @@ const styles = StyleSheet.create({
       color: 'white',
       fontWeight: 'bold',
     },
+    createButton: {
+      backgroundColor: 'green',
+      padding: 10,
+      borderRadius: 5,
+    },
+    createButtonText: {
+      color: 'white',
+      fontWeight: 'bold',
+    },
   });
+
+
+export default Store;

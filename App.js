@@ -15,6 +15,7 @@ import Color from "./App/Utils/Color";
 import { useFonts } from 'expo-font';
 import HomeScreen from "./App/Screens/HomeScreen/HomeScreen";
 import RegisterScreen from "./App/Screens/RegisterScreen/RegisterScreen";
+import AddStore from "./App/Screens/Store/AddStore";
 
 const Stack = createNativeStackNavigator();
 
@@ -101,6 +102,7 @@ export default function App() {
                 <Stack.Screen name="login" component={LoginScreen} />
                 <Stack.Screen name="register" component={RegisterScreen} />
                 <Stack.Screen name="Home" component={TabNavigation} />
+                <Stack.Screen name="addStore" component={AddStore} />
               </Stack.Navigator>
             </NavigationContainer>
           </SignedOut>

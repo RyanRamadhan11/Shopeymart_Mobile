@@ -73,8 +73,7 @@ export default function LoginScreen({navigation}) {
   const handleRegister = () => {
     navigation.navigate("register");
   };
-
-
+  
   const onPress = async () => {
     try {
       const { createdSessionId, signIn, signUp, setActive } = await startOAuthFlow();
@@ -110,9 +109,11 @@ export default function LoginScreen({navigation}) {
     <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
       <Text style={styles.loginButtonText}>Login</Text>
     </TouchableOpacity>
+
     <TouchableOpacity style={styles.forgotPassword}>
       <Text style={{ color: '#fff', fontSize: 14 }}>Forgot Password?</Text>
     </TouchableOpacity>
+
     <TouchableOpacity style={styles.button} onPress={onPress}>
       <View style={styles.buttonContent}>
         <Image
@@ -128,6 +129,7 @@ export default function LoginScreen({navigation}) {
         Don't have an account? Sign Up
       </Text>
     </TouchableOpacity>
+
   </View>
   );
 }
